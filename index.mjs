@@ -11,7 +11,7 @@ const dmca = (await axios.get("https://raw.githubusercontent.com/dtubego/dmca/re
 app.use(cors())
 app.use(bodyParser.json())
 
-const bannedTXs = [0,3,4,24,28,5,19]
+const bannedTXs = [0,3,4,24,28,5,19,13]
 const AVALON_API = process.env.AVALON_API || "http://127.0.0.1:3001"
 const PORT = parseInt(process.env.HTTP_PORT) || 3110
 
