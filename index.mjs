@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 
 const bannedTXs = [0,3,4,24,28,5,19,13]
 const AVALON_API = process.env.AVALON_API || "http://127.0.0.1:3001"
-const BLOCK_DOWNVOTES = process.env.BLOCK_DOWNVOTES == '1' || (typeof process.env.BLOCK_DOWNVOTES !== 'undefined' && process.env.BLOCK_DOWNVOTES.toLowerCase() == 'true') || false
+const BLOCK_DOWNVOTES = process.env.BLOCK_DOWNVOTES == '1' || (typeof process.env.BLOCK_DOWNVOTES === 'string' && process.env.BLOCK_DOWNVOTES.toLowerCase() == 'true') || false
 const PORT = parseInt(process.env.HTTP_PORT) || 3110
 
 app.post('/transact', async (req, res) => {
