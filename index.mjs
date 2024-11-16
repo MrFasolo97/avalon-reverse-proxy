@@ -27,8 +27,13 @@ app.post('/transact', async (req, res) => {
         console.log(body)
         res.status(500).send({ error: "invalid tx data" })
     } else {
-        let result = (await axios.post(AVALON_API+"/transact", body)).data
-        res.json(result)
+        try {
+            let result = (await axios.post(AVALON_API+"/transact", body)).data
+            res.json(result)
+        } catch(e) {
+            console.log(e.toString())
+            res.status(500).send({error: "unknown"})
+        }
     }
 })
 
