@@ -2,9 +2,21 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import axios from 'axios'
-import log4js from "log4js";
+import log4js from 'log4js'
+import { exit } from 'node:process'
+import * as fs from 'node:fs'
 
 const date = new Date();
+
+if(!fs.existsSync("logs")) {
+  fs.mkdirSync("logs")
+} else {
+  let pathStat = await fs.statSync("logs")
+  if (!pathStat.isDirectory()) {
+    console.log("./logs should be a directory! Exiting.")
+    exit(1)
+  }
+}
 
 log4js.configure({
   appenders: { file: { type: "file", filename: "logs/logs-"+date.toISOString()+".log" },
