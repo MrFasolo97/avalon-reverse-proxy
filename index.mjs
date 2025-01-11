@@ -2,7 +2,17 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import axios from 'axios'
+import log4js from "log4js";
 
+const date = new Date();
+
+log4js.configure({
+  appenders: { file: { type: "file", filename: "logs/logs-"+date.toISOString()+".log" },
+              console: { type: "console" } },
+  categories: { default: { appenders: ["file", "console"], level: "debug" } },
+});
+
+const logger = log4js.getLogger();
 
 const app = new express()
 
@@ -19,22 +29,22 @@ const PORT = parseInt(process.env.HTTP_PORT) || 3110
 app.post('/transact', async (req, res) => {
     let body = req.body
     if (dmca.authors.includes(body.sender) && bannedTXs.includes(body.type)) {
-        console.log("Blocked tx:")
-        console.log(body)
+        logger.info("Blocked tx:", body)
         res.status(500).send({ error: "invalid tx data" })
     } else if (body.type == 5 && BLOCK_DOWNVOTES && body.data.vt < 0) {
-        console.log("Blocked tx:")
-        console.log(body)
+        logger.info("Blocked tx:", body)
         res.status(500).send({ error: "invalid tx data" })
     } else {
         try {
             let result = (await axios.post(AVALON_API+"/transact", body)).data
             res.json(result)
         } catch(e) {
-            console.log(e.toString())
+            logger.error(e.toString())
             res.status(500).send({error: "unknown"})
         }
     }
 })
 
-app.listen(PORT);
+app.listen(PORT, () => {
+    logger.info("Now listening on", PORT, "and redirecting to", AVALON_API)
+});
