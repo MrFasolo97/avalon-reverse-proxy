@@ -5,6 +5,7 @@ import axios from 'axios'
 import log4js from 'log4js'
 import { exit } from 'node:process'
 import * as fs from 'node:fs'
+import 'dotenv/config'
 
 const date = new Date();
 
